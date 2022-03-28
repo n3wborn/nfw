@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 $name = isset($_GET['name']) ? $_GET['name'] : 'World';
 
 header('Content-Type: text/html; charset=utf-8');

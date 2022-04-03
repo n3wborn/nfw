@@ -6,6 +6,7 @@ require_once __DIR__.'/../../vendor/autoload.php';
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing;
 
 /*
  * contrary to the way it's done in the doc
@@ -14,20 +15,21 @@ use Symfony\Component\HttpFoundation\Response;
  */
 
 $request = Request::createFromGlobals();
-$response = new Response();
+$routes = include __DIR__.'/../../src/app.php';
 
-$map = [
-    '/hello' => __DIR__.'/../pages/hello.php',
-    '/bye' => __DIR__.'/../pages/bye.php',
-];
+$context = (new Routing\RequestContext())->fromRequest($request);
+$matcher = new Routing\Matcher\UrlMatcher($routes, $context);
 
-$path = $request->getPathInfo();
+try {
+    extract($matcher->match($request->getPathInfo()), EXTR_SKIP);
+    ob_start();
+    include sprintf(__DIR__.'/../../src/pages/%s.php', $_route);
 
-if (isset($map[$path])) {
-    require $map[$path];
-} else {
-    $response->setStatusCode(404);
-    $response->setContent('Not found');
+    $response = new Response(ob_get_clean());
+} catch (Routing\Exception\ResourceNotFoundException $exception) {
+    $response = new Response('Not Found', 404);
+} catch (Exception $exception) {
+    $response = new Response('An error occurred', 500);
 }
 
 $response->send();

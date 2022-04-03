@@ -6,9 +6,6 @@ use PHPUnit\Framework\TestCase;
 
 class IndexTest extends TestCase
 {
-    /**
-     * @runInSeparateProcess
-     */
     public function testHello(): void
     {
         $_GET['name'] = 'n3wborn';

@@ -14,7 +14,7 @@ use Symfony\Component\Routing;
  * we use index.php as the front controller
  */
 
-function render_template($request)
+function render_template(Request $request): Response
 {
     extract($request->attributes->all(), EXTR_SKIP);
     ob_start();

@@ -7,14 +7,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
-/** @param int|null $year */
-function is_leap_year($year = null): bool
+function is_leap_year(?string $year = null): bool
 {
-    if (null === $year) {
-        $year = date('Y');
-    }
+    $year ??= intval(date('Y'));
 
-    return 0 === $year % 400 || (0 === $year % 4 && 0 != $year % 100);
+    return 0 === $year % 400 || (0 === $year % 4 && 0 !== $year % 100);
 }
 
 $routes = new RouteCollection();

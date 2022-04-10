@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
+use Nfw\Controller\GreetingsController;
 use Nfw\Controller\LeapYearController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
@@ -23,23 +23,11 @@ $routes->add('is_leap_year', new Route('/is_leap_year/{year}', [
 
 $routes->add('hello', new Route('/hello/{name}', [
     'name' => 'World',
-    '_controller' => function (Request $request) {
-        $response = render_template($request);
-
-        $response->headers->set('Content-type', 'text/plain');
-
-        return $response;
-    },
+    '_controller' => [new GreetingsController(), 'greeting'],
 ]));
 
 $routes->add('bye', new Route('/bye', [
-    '_controller' => function (Request $request) {
-        $response = render_template($request);
-
-        $response->headers->set('Content-type', 'text/plain');
-
-        return $response;
-    },
+    '_controller' => [new GreetingsController(), 'greeting'],
 ]));
 
 return $routes;

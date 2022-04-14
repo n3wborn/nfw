@@ -1,0 +1,32 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Nfw\Controller;
+
+use Symfony\Component\Routing\Route;
+use Symfony\Component\Routing\RouteCollection;
+
+final class RouteController
+{
+    public function route(): RouteCollection
+    {
+        $routes = new RouteCollection();
+
+        $routes->add('is_leap_year', new Route('/is_leap_year/{year}', [
+            'year' => null,
+            '_controller' => 'Nfw\Controller\LeapYearController::index',
+        ]));
+
+        $routes->add('hello', new Route('/hello/{name}', [
+            'name' => 'World',
+            '_controller' => 'Nfw\Controller\GreetingsController::greeting',
+        ]));
+
+        $routes->add('bye', new Route('/bye', [
+            '_controller' => 'Nfw\Controller\GreetingsController::greeting',
+        ]));
+
+        return $routes;
+    }
+}

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Nfw;
+namespace Nfw\Framework;
 
 use Exception;
 use Symfony\Component\HttpFoundation\Request;

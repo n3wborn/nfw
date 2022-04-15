@@ -15,7 +15,7 @@ final class RouteController
 
         $routes->add('is_leap_year', new Route('/is_leap_year/{year}', [
             'year' => null,
-            '_controller' => 'Nfw\Controller\LeapYearController::index',
+            '_controller' => 'Nfw\Calendar\Controller\LeapYearController::index',
         ]));
 
         $routes->add('hello', new Route('/hello/{name}', [

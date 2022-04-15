@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 require_once __DIR__.'/../../vendor/autoload.php';
 
-use Nfw\Framework;
 use Nfw\Controller\RouteController;
+use Nfw\Framework\Framework;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Controller\ArgumentResolver;

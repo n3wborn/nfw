@@ -2,16 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Nfw\Controller;
+namespace Nfw\Calendar\Controller;
 
+use Nfw\Calendar\Model\LeapYear;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 final class LeapYearController
 {
-    public function index(Request $request): Response
+    public function index(?string $year, Request $request): Response
     {
-        if (is_leap_year($request->attributes->get('year'))) {
+        $leapYear = new LeapYear();
+
+        if ($leapYear->is_leap_year($year)) {
             return new Response('Yeap, this is a leap year');
         }
 

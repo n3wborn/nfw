@@ -6,6 +6,7 @@ namespace Tests\Unit;
 
 use Nfw\Framework\Framework;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentResolverInterface;
 use Symfony\Component\HttpKernel\Controller\ControllerResolverInterface;
@@ -22,6 +23,15 @@ class FrameworkUnitTest extends TestCase
         $response = $framework->handle(new Request());
 
         $this->assertEquals(404, $response->getStatusCode());
+    }
+
+    public function testErrorHandling()
+    {
+        $framework = $this->getFrameworkForException(new RuntimeException());
+
+        $response = $framework->handle(new Request());
+
+        $this->assertEquals(500, $response->getStatusCode());
     }
 
     private function getFrameworkForException($exception)

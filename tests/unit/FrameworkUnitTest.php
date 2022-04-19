@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Unit;
 
+use Exception;
+use Generator;
 use Nfw\Calendar\Controller\LeapYearController;
 use Nfw\Framework\Framework;
 use PHPUnit\Framework\TestCase;
@@ -19,7 +21,7 @@ use Symfony\Component\Routing\RequestContext;
 
 class FrameworkUnitTest extends TestCase
 {
-    public function testNotFoundHandling()
+    public function testNotFoundHandling(): void
     {
         $framework = $this->getFrameworkForException(new ResourceNotFoundException());
 
@@ -28,7 +30,7 @@ class FrameworkUnitTest extends TestCase
         $this->assertEquals(404, $response->getStatusCode());
     }
 
-    public function testErrorHandling()
+    public function testErrorHandling(): void
     {
         $framework = $this->getFrameworkForException(new RuntimeException());
 
@@ -37,7 +39,7 @@ class FrameworkUnitTest extends TestCase
         $this->assertEquals(500, $response->getStatusCode());
     }
 
-    public function leapYearGenerator()
+    public function leapYearGenerator(): Generator
     {
         yield [
             '1980',
@@ -53,7 +55,7 @@ class FrameworkUnitTest extends TestCase
     /**
      * @dataProvider leapYearGenerator
      */
-    public function testLeapControllerResponse(string $year, string $answer)
+    public function testLeapControllerResponse(string $year, string $answer): void
     {
         $matcher = $this->createMock(UrlMatcherInterface::class);
 
@@ -84,7 +86,7 @@ class FrameworkUnitTest extends TestCase
         $this->assertStringContainsString($answer, $response->getContent());
     }
 
-    private function getFrameworkForException($exception)
+    private function getFrameworkForException(Exception $exception): Framework
     {
         $matcher = $this->createMock(UrlMatcherInterface::class);
 

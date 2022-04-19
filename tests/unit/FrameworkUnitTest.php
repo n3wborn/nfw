@@ -37,38 +37,23 @@ class FrameworkUnitTest extends TestCase
         $this->assertEquals(500, $response->getStatusCode());
     }
 
-    public function testLeapControllerLeapYearResponse()
+    public function leapYearGenerator()
     {
-        $matcher = $this->createMock(UrlMatcherInterface::class);
+        yield [
+            '1980',
+            'Yeap, this is a leap year',
+        ];
 
-        $matcher
-            ->expects($this->once())
-            ->method('match')
-            ->will($this->returnValue([
-                '_route' => 'is_leap_year/${year}',
-                'year' => '1980',
-                '_controller' => [new LeapYearController(), 'index'],
-            ]))
-        ;
-
-        $matcher
-            ->expects($this->once())
-            ->method('getContext')
-            ->will($this->returnValue($this->createMock(RequestContext::class)))
-        ;
-
-        $controllerResolver = new ControllerResolver();
-        $argumentResolver = new ArgumentResolver();
-
-        $framework = new Framework($matcher, $controllerResolver, $argumentResolver);
-
-        $response = $framework->handle(new Request());
-
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertStringContainsString('Yeap, this is a leap year', $response->getContent());
+        yield [
+            '1981',
+            'Nope, this is not a leap year',
+        ];
     }
 
-    public function testLeapControllerNoLeapYearResponse()
+    /**
+     * @dataProvider leapYearGenerator
+     */
+    public function testLeapControllerResponse(string $year, string $answer)
     {
         $matcher = $this->createMock(UrlMatcherInterface::class);
 
@@ -77,7 +62,7 @@ class FrameworkUnitTest extends TestCase
             ->method('match')
             ->will($this->returnValue([
                 '_route' => 'is_leap_year/${year}',
-                'year' => '1981',
+                'year' => $year,
                 '_controller' => [new LeapYearController(), 'index'],
             ]))
         ;
@@ -96,7 +81,7 @@ class FrameworkUnitTest extends TestCase
         $response = $framework->handle(new Request());
 
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertStringContainsString('Nope, this is not a leap year', $response->getContent());
+        $this->assertStringContainsString($answer, $response->getContent());
     }
 
     private function getFrameworkForException($exception)

@@ -18,15 +18,6 @@ final class RouteController
             '_controller' => 'Nfw\Calendar\Controller\LeapYearController::index',
         ]));
 
-        $routes->add('hello', new Route('/hello/{name}', [
-            'name' => 'World',
-            '_controller' => 'Nfw\Controller\GreetingsController::greeting',
-        ]));
-
-        $routes->add('bye', new Route('/bye', [
-            '_controller' => 'Nfw\Controller\GreetingsController::greeting',
-        ]));
-
         return $routes;
     }
 }

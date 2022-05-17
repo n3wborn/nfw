@@ -6,6 +6,8 @@ require_once __DIR__.'/../../vendor/autoload.php';
 
 use Nfw\Controller\RouteController;
 use Nfw\Framework\Framework;
+use Nfw\Framework\ResponseEvent;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
 use Symfony\Component\HttpKernel\Controller\ControllerResolver;
@@ -17,6 +19,21 @@ use Symfony\Component\Routing;
  * we use index.php as the front controller
  */
 
+$dispatcher = new EventDispatcher();
+
+$dispatcher->addListener('NfwEvent', function (ResponseEvent $event) {
+    $response = $event->getResponse();
+
+    if ($response->isRedirection()
+        || ($response->headers->has('Content-Type') && false === strpos($response->headers->get('Content-Type'), 'html'))
+        || 'html' !== $event->getRequest()->getRequestFormat()
+    ) {
+        return;
+    }
+
+    $response->setContent($response->getContent().' GA CODE');
+});
+
 $request = Request::createFromGlobals();
 $routes = (new RouteController())->route();
 
@@ -26,7 +43,7 @@ $matcher = new Routing\Matcher\UrlMatcher($routes, $context);
 $controllerResolver = new ControllerResolver();
 $argumentResolver = new ArgumentResolver();
 
-$framework = new Framework($matcher, $controllerResolver, $argumentResolver);
+$framework = new Framework($dispatcher, $matcher, $controllerResolver, $argumentResolver);
 $response = $framework->handle($request);
 
 $response->send();

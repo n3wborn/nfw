@@ -34,6 +34,15 @@ $dispatcher->addListener('NfwEvent', function (ResponseEvent $event) {
     $response->setContent($response->getContent().' GA CODE');
 });
 
+$dispatcher->addListener('NfwEvent', function (ResponseEvent $event) {
+    $response = $event->getResponse();
+    $headers = $response->headers;
+
+    if (!$headers->has('Content-Length') && !$headers->has('Transfert-Encoding')) {
+        $headers->set('Content-Length', strval(strlen($response->getContent())));
+    }
+}, -255);
+
 $request = Request::createFromGlobals();
 $routes = (new RouteController())->route();
 

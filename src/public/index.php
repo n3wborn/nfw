@@ -21,8 +21,8 @@ use Symfony\Component\Routing;
  */
 
 $dispatcher = new EventDispatcher();
-$dispatcher->addListener('NfwEvent', [new GoogleListener(), 'onResponse']);
-$dispatcher->addListener('NfwEvent', [new ContentLengthListener(), 'onResponse'], -255);
+$dispatcher->addSubscriber(new GoogleListener());
+$dispatcher->addSubscriber(new ContentLengthListener());
 
 $request = Request::createFromGlobals();
 $routes = (new RouteController())->route();

@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Nfw\Framework\Listeners;
 
 use Nfw\Framework\ResponseEvent;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-final class GoogleListener
+final class GoogleListener implements EventSubscriberInterface
 {
     public function onResponse(ResponseEvent $event): void
     {
@@ -20,5 +21,10 @@ final class GoogleListener
         }
 
         $response->setContent($response->getContent().' GA CODE');
+    }
+
+    public static function getSubscribedEvents(): array
+    {
+        return ['response' => 'onResponse'];
     }
 }

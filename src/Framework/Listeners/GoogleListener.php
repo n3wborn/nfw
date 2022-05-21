@@ -25,6 +25,6 @@ final class GoogleListener implements EventSubscriberInterface
 
     public static function getSubscribedEvents(): array | object
     {
-        return ['response' => 'onResponse'];
+        return ['NfwEvent' => 'onResponse'];
     }
 }

@@ -23,7 +23,7 @@ final class GoogleListener implements EventSubscriberInterface
         $response->setContent($response->getContent().' GA CODE');
     }
 
-    public static function getSubscribedEvents(): array
+    public static function getSubscribedEvents(): array | object
     {
         return ['response' => 'onResponse'];
     }
